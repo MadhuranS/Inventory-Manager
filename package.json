@@ -1,0 +1,22 @@
+{
+  "name": "shopify-developer-challenge",
+  "version": "1.0.0",
+  "description": "Submission for shopify developer challenge",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server",
+    "server": "nodemon server"
+  },
+  "author": "Madhuran Sivapragasam",
+  "license": "MIT",
+  "dependencies": {
+    "config": "^3.3.7",
+    "express": "^4.17.2",
+    "express-validator": "^6.14.0",
+    "mongoose": "^6.1.6"
+  },
+  "devDependencies": {
+    "concurrently": "^7.0.0",
+    "nodemon": "^2.0.15"
+  }
+}

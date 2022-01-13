@@ -41,9 +41,9 @@ router.get("/", async (req, res) => {
     }
 });
 
-// @route PUT api/items/:id
+// @route PATCH api/items/:id
 // @desc Update an item
-router.put("/:id", async (req, res) => {
+router.patch("/:id", async (req, res) => {
     try {
         const item = await Item.findById(req.params.id);
 

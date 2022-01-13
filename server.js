@@ -10,7 +10,7 @@ connectDB();
 app.use(express.json({ extended: false })); //needed to get data in req.body
 
 //Define routes
-app.use('/api/items', require('./routes/api/items'))
+app.use('/api/items', require('./routes/items'))
 
 const PORT = process.env.PORT || 5000;
 

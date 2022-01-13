@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { check, validationResult } = require("express-validator");
 
-const Item = require("../../models/Item");
+const Item = require("../models/Item");
 
 // @route POST api/items
 // @desc Create an item

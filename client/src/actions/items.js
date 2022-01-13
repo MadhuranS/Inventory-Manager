@@ -1,11 +1,11 @@
 import { GET_ITEMS, ITEMS_ERROR } from "./types";
 import { setAlert } from "./alert";
-import axios from "axios"
+import axios from "axios";
 
 export const getItems = () => async (dispatch) => {
     try {
-        const res = await axios.get("/api/items")
-        dispatch({type: GET_ITEMS, payload: res.data})
+        const res = await axios.get("/api/items");
+        dispatch({ type: GET_ITEMS, payload: res.data });
         dispatch(setAlert("Successfully fetched items!", "success"));
     } catch (err) {
         dispatch({
@@ -28,21 +28,18 @@ export const createItem = (formData) => async (dispatch) => {
             },
         };
         await axios.post("/api/items", formData, config);
-        dispatch(
-            setAlert(
-                "Item Created",
-                "success"
-            )
-        );
+        dispatch(setAlert("Item Created", "success"));
     } catch (err) {
         dispatch(
             setAlert(
-                `Could not create item, error data: ${JSON.stringify(err.response.data)}, error code: ${err.response.status}`,
+                `Could not create item, error data: ${JSON.stringify(
+                    err.response.data
+                )}, error code: ${err.response.status}`,
                 "danger"
             )
         );
     }
-}
+};
 
 export const editItem = (formData, id) => async (dispatch) => {
     try {
@@ -52,19 +49,37 @@ export const editItem = (formData, id) => async (dispatch) => {
             },
         };
         await axios.patch(`/api/items/${id}`, formData, config);
-        dispatch(
-            setAlert(
-                "Item Edited",
-                "success"
-            )
-        );
+        dispatch(setAlert("Item Edited", "success"));
     } catch (err) {
-        console.log(err.msg)
         dispatch(
             setAlert(
-                `Could not edit item, error data: ${JSON.stringify(err.response.data)}, error code: ${err.response.status}`,
+                `Could not edit item, error data: ${JSON.stringify(
+                    err.response.data
+                )}, error code: ${err.response.status}`,
                 "danger"
             )
         );
     }
-}
+};
+
+export const deleteItem = (id) => async (dispatch) => {
+    try {
+        const config = {
+            headers: {
+                "Content-Type": "application/json",
+            },
+        };
+        await axios.delete(`/api/items/${id}`, null, config);
+        dispatch(setAlert("Item deleted", "success"));
+        window.location.reload(false);
+    } catch (err) {
+        dispatch(
+            setAlert(
+                `Could not delete item, error data: ${JSON.stringify(
+                    err.response.data
+                )}, error code: ${err.response.status}`,
+                "danger"
+            )
+        );
+    }
+};

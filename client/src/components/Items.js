@@ -1,13 +1,19 @@
 import React, { useEffect, Fragment } from "react";
-import { getItems } from "../actions/items";
+import { getItems, deleteItem } from "../actions/items";
 import { connect } from "react-redux";
 import Card from "react-bootstrap/Card";
+import Button from "react-bootstrap/Button";
 import { Link } from "react-router-dom";
 
-const Items = ({ getItems, items: { items } }) => {
+const Items = ({ getItems, deleteItem, items: { items } }) => {
     useEffect(() => {
         getItems(); //fetch all items everytime the page reloads
     }, [getItems]);
+
+    const onClick = (e, id) => {
+        deleteItem(id)
+    };
+
     return (
         <Fragment>
             {items &&
@@ -25,14 +31,17 @@ const Items = ({ getItems, items: { items } }) => {
                             <Card.Text>{item.description}</Card.Text>
                         </Card.Body>
                         <Card.Footer>
-                            <Link className="btn btn-primary my-1" to={`/edit/${item._id}`}> Edit</Link>
+                            <Link
+                                className="btn btn-primary my-1"
+                                to={`/edit/${item._id}`}
+                            >
+                                Edit
+                            </Link>
+                            <Button onClick={(e) => onClick(e, item._id)}>Delete</Button>
                         </Card.Footer>
                     </Card>
                 ))}
-            <Link
-                to={`/create`}
-                className="btn btn-primary my-1"
-            >
+            <Link to={`/create`} className="btn btn-primary my-1">
                 Create an inventory item
             </Link>
         </Fragment>
@@ -43,4 +52,4 @@ const mapStateToProps = (state) => ({
     items: state.items,
 });
 
-export default connect(mapStateToProps, { getItems })(Items);
+export default connect(mapStateToProps, { getItems, deleteItem })(Items);

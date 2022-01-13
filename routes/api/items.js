@@ -8,25 +8,13 @@ const Item = require("../../models/Item");
 // @desc Create an item
 router.post(
     "/",
-    [check("name", "Name is required").notEmpty()],
+    [check("name", "Name is required and must be a string of at least length 1").notEmpty().isString()],
+    [check("description", "Description is required and must be a string of at least length 1").notEmpty().isString()],
     async (req, res) => {
         try {
             const errors = validationResult(req);
             if (!errors.isEmpty()) {
                 return res.status(400).json({ errors: errors.array() });
-            }
-
-            if (
-                req.body.description != null &&
-                typeof req.body.description !== "string"
-            ) {
-                return res
-                    .status(400)
-                    .json({
-                        msg: "Description must be a string or null",
-                        param: "description",
-                        location: "body",
-                    });
             }
 
             const newItem = new Item({
@@ -60,26 +48,26 @@ router.get("/", async (req, res) => {
 router.patch("/:id", async (req, res) => {
     try {
         if (
-            req.body.name != null &&(
+            req.body.hasOwnProperty("name") && (
             typeof req.body.name !== "string" || req.body.name.length < 1)
         ) {
             return res
                 .status(400)
                 .json({
-                    msg: "Name must be a string of length 1 or greater or null",
+                    msg: "If name is passed, it must be a string of at least length 1",
                     param: "name",
                     location: "body",
                 });
         }
 
         if (
-            req.body.description != null &&
-            typeof req.body.description !== "string"
+            req.body.hasOwnProperty("description")  &&
+            (typeof req.body.description !== "string" || req.body.description.length < 1)
         ) {
             return res
                 .status(400)
                 .json({
-                    msg: "Description must be a string or null",
+                    msg: "If description is passed, it must be a string of at least length 1",
                     param: "description",
                     location: "body",
                 });

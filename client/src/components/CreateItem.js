@@ -35,7 +35,7 @@ const CreateItem = ({ createItem}) => {
                         placeholder="Item name"
                     />
                     <Form.Text className="text-muted">
-                        API will send a 400 error if left empty
+                        API will send a 400 error if left empty since name should never be empty
                     </Form.Text>
                 </Form.Group>
 
@@ -53,7 +53,7 @@ const CreateItem = ({ createItem}) => {
                     Submit form
                 </Button>
                 <Link to={`/`} className="btn btn-primary my-1">
-                    Back to tickets
+                    Back to items
                 </Link>
             </Form>
         </Fragment>

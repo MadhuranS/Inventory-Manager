@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 
 const Items = ({ getItems, items: { items } }) => {
     useEffect(() => {
-        getItems(); //fetch all tickets everytime the page reloads
+        getItems(); //fetch all items everytime the page reloads
     }, [getItems]);
     return (
         <Fragment>
@@ -24,12 +24,14 @@ const Items = ({ getItems, items: { items } }) => {
                             <Card.Title>{item.name}</Card.Title>
                             <Card.Text>{item.description}</Card.Text>
                         </Card.Body>
+                        <Card.Footer>
+                            <Link className="btn btn-primary my-1" to={`/edit/${item._id}`}> Edit</Link>
+                        </Card.Footer>
                     </Card>
                 ))}
             <Link
                 to={`/create`}
                 className="btn btn-primary my-1"
-                data-test="Ticket-Link"
             >
                 Create an inventory item
             </Link>

@@ -7,6 +7,7 @@ import { Provider } from "react-redux";
 import store from "./store";
 import "bootstrap/dist/css/bootstrap.min.css";
 import CreateItem from "./components/CreateItem";
+import EditItem from "./components/EditItem";
 
 const App = () => {
     return (
@@ -19,6 +20,7 @@ const App = () => {
                             <Fragment>
                                 <Route path="/" element={<Items />}></Route>
                                 <Route path="/create" element={<CreateItem/>}></Route>
+                                <Route path="/edit/:id" element={<EditItem/>}></Route>
                             </Fragment>
                         </Routes>
                     </div>

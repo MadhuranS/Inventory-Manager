@@ -27,7 +27,6 @@ export const createItem = (formData) => async (dispatch) => {
                 "Content-Type": "application/json",
             },
         };
-        console.log("hi i was here", formData)
         await axios.post("/api/items", formData, config);
         dispatch(
             setAlert(
@@ -38,7 +37,32 @@ export const createItem = (formData) => async (dispatch) => {
     } catch (err) {
         dispatch(
             setAlert(
-                `Could not create item, error text: ${err.response.statusText}, error code: ${err.response.status}`,
+                `Could not create item, error data: ${JSON.stringify(err.response.data)}, error code: ${err.response.status}`,
+                "danger"
+            )
+        );
+    }
+}
+
+export const editItem = (formData, id) => async (dispatch) => {
+    try {
+        const config = {
+            headers: {
+                "Content-Type": "application/json",
+            },
+        };
+        await axios.patch(`/api/items/${id}`, formData, config);
+        dispatch(
+            setAlert(
+                "Item Edited",
+                "success"
+            )
+        );
+    } catch (err) {
+        console.log(err.msg)
+        dispatch(
+            setAlert(
+                `Could not edit item, error data: ${JSON.stringify(err.response.data)}, error code: ${err.response.status}`,
                 "danger"
             )
         );

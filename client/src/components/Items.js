@@ -2,6 +2,7 @@ import React, { useEffect, Fragment } from "react";
 import { getItems } from "../actions/items";
 import { connect } from "react-redux";
 import Card from "react-bootstrap/Card";
+import { Link } from "react-router-dom";
 
 const Items = ({ getItems, items: { items } }) => {
     useEffect(() => {
@@ -18,17 +19,20 @@ const Items = ({ getItems, items: { items } }) => {
                         style={{ width: "100%" }}
                         className="mb-2 border-2"
                     >
-                        <Card.Header>
-                            Item Id: {item._id}
-                        </Card.Header>
+                        <Card.Header>Item Id: {item._id}</Card.Header>
                         <Card.Body>
-                            <Card.Title>
-                                {item.name}
-                            </Card.Title>
+                            <Card.Title>{item.name}</Card.Title>
                             <Card.Text>{item.description}</Card.Text>
                         </Card.Body>
                     </Card>
                 ))}
+            <Link
+                to={`/create`}
+                className="btn btn-primary my-1"
+                data-test="Ticket-Link"
+            >
+                Create an inventory item
+            </Link>
         </Fragment>
     );
 };

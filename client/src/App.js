@@ -6,9 +6,9 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "./store";
 import "bootstrap/dist/css/bootstrap.min.css";
+import CreateItem from "./components/CreateItem";
 
 const App = () => {
-  console.log("what happened")
     return (
         <Provider store={store}>
             <Router>
@@ -18,6 +18,7 @@ const App = () => {
                         <Routes>
                             <Fragment>
                                 <Route path="/" element={<Items />}></Route>
+                                <Route path="/create" element={<CreateItem/>}></Route>
                             </Fragment>
                         </Routes>
                     </div>

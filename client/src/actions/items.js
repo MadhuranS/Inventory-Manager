@@ -18,5 +18,29 @@ export const getItems = () => async (dispatch) => {
             )
         );
     }
-
 };
+
+export const createItem = (formData) => async (dispatch) => {
+    try {
+        const config = {
+            headers: {
+                "Content-Type": "application/json",
+            },
+        };
+        console.log("hi i was here", formData)
+        await axios.post("/api/items", formData, config);
+        dispatch(
+            setAlert(
+                "Item Created",
+                "success"
+            )
+        );
+    } catch (err) {
+        dispatch(
+            setAlert(
+                `Could not create item, error text: ${err.response.statusText}, error code: ${err.response.status}`,
+                "danger"
+            )
+        );
+    }
+}

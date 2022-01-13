@@ -8,13 +8,27 @@ const Item = require("../../models/Item");
 // @desc Create an item
 router.post(
     "/",
-    [check("name", "Name is required").not().isEmpty()],
+    [check("name", "Name is required").notEmpty()],
     async (req, res) => {
         try {
             const errors = validationResult(req);
             if (!errors.isEmpty()) {
                 return res.status(400).json({ errors: errors.array() });
             }
+
+            if (
+                req.body.description != null &&
+                typeof req.body.description !== "string"
+            ) {
+                return res
+                    .status(400)
+                    .json({
+                        msg: "Description must be a string or null",
+                        param: "description",
+                        location: "body",
+                    });
+            }
+
             const newItem = new Item({
                 name: req.body.name,
                 description: req.body.description,
@@ -45,6 +59,32 @@ router.get("/", async (req, res) => {
 // @desc Update an item
 router.patch("/:id", async (req, res) => {
     try {
+        if (
+            req.body.name != null &&(
+            typeof req.body.name !== "string" || req.body.name.length < 1)
+        ) {
+            return res
+                .status(400)
+                .json({
+                    msg: "Name must be a string of length 1 or greater or null",
+                    param: "name",
+                    location: "body",
+                });
+        }
+
+        if (
+            req.body.description != null &&
+            typeof req.body.description !== "string"
+        ) {
+            return res
+                .status(400)
+                .json({
+                    msg: "Description must be a string or null",
+                    param: "description",
+                    location: "body",
+                });
+        }
+
         const item = await Item.findById(req.params.id);
 
         if (!item) {
@@ -56,7 +96,7 @@ router.patch("/:id", async (req, res) => {
             description: req.body.description,
         });
 
-        res.json({msg: "Updated document", updates: req.body});
+        res.json({ msg: "Updated document", updates: req.body });
     } catch (err) {
         console.error("Server error", err.message);
         res.status(500).send("Internal server error");

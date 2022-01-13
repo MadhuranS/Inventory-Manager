@@ -7,8 +7,7 @@ const ItemSchema = new mongoose.Schema({
         required: true
     },
     description: {
-        type: String,
-        default: "No description"
+        type: String
     }
 });
 

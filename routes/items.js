@@ -4,7 +4,7 @@ const { check, validationResult } = require("express-validator");
 
 const Item = require("../models/Item");
 const upload = require("../helpers/upload");
-const {uploadImage, deleteImage} = require("../services/image");
+const { uploadImage, deleteImage } = require("../services/image");
 const { response } = require("express");
 
 // @route POST api/items
@@ -82,13 +82,15 @@ router.get("/", async (req, res) => {
 
 // @route PATCH api/items/:id
 // @desc Update an item
-router.patch("/:id", async (req, res) => {
+router.patch("/:id", upload.single("image"), async (req, res) => {
     try {
+        let errors = [];
+        //checks for correct input values
         if (
-            req.body.hasOwnProperty("name") &&
+            "name" in req.body &&
             (typeof req.body.name !== "string" || req.body.name.length < 1)
         ) {
-            return res.status(400).json({
+            errors.push({
                 msg: "If name is passed, it must be a string of at least length 1",
                 param: "name",
                 location: "body",
@@ -96,30 +98,75 @@ router.patch("/:id", async (req, res) => {
         }
 
         if (
-            req.body.hasOwnProperty("description") &&
+            "description" in req.body &&
             (typeof req.body.description !== "string" ||
                 req.body.description.length < 1)
         ) {
-            return res.status(400).json({
+            errors.push({
                 msg: "If description is passed, it must be a string of at least length 1",
                 param: "description",
                 location: "body",
             });
         }
 
-        const item = await Item.findById(req.params.id);
+        if (
+            req.hasOwnProperty("file") &&
+            !req.file.mimetype.startsWith("image/")
+        ) {
+            errors.push({
+                msg: "If an image is passed, it must be an image file ty[e",
+                param: "file",
+            });
+        }
+        if (errors.length > 0) return res.status(400).json({ errors: errors });
 
+        //find item with given id
+        const item = await Item.findById(req.params.id);
         if (!item) {
             return res.status(404).json({ msg: "Item not found" });
         }
 
-        await item.updateOne({
-            name: req.body.name,
-            description: req.body.description,
-        });
+        //if file is passed, update the file value, otherwise ignore
+        let updatedItem = {};
+        if (req.hasOwnProperty("file")) {
+            //delete old image from cloudinary
+            const deleteErrors = await deleteImage(item.thumbnail.public_id);
+            if (deleteErrors.length > 0) {
+                return res.status(502).json({ errors: deleteErrors });
+            }
 
-        res.json({ msg: "Updated document", updates: req.body });
+            //upload new image to cloudinary and check if upload is successful
+            const uploadResponse = await uploadImage(req.file);
+            if (uploadResponse.errors.length > 0) {
+                return res.status(502).json({ errors: uploadResponse.errors });
+            }
+            updatedItem = {
+                name: req.body.name,
+                description: req.body.description,
+                thumbnail: {
+                    url: uploadResponse.data.url,
+                    public_id: uploadResponse.data.public_id,
+                },
+            };
+        } else {
+            updatedItem = {
+                name: req.body.name,
+                description: req.body.description,
+            };
+        }
+
+        //update item on mongodb
+        await item.updateOne(updatedItem);
+
+        //return json response
+        res.json({
+            msg: "Updated document",
+            bodyUpdates: req.body,
+            fileUpdates: req.file ? true : false,
+        });
     } catch (err) {
+        //return error
+        console.error(err.message);
         console.error("Server error", err.message);
         res.status(500).send("Internal server error");
     }
@@ -136,7 +183,7 @@ router.delete("/:id", async (req, res) => {
         }
 
         //delete image from cloudinary
-        const deleteErrors = await deleteImage(item.thumbnail.public_id)
+        const deleteErrors = await deleteImage(item.thumbnail.public_id);
         if (deleteErrors.length > 0) {
             return res.status(502).json({ errors: deleteErrors });
         }

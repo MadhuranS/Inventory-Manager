@@ -8,6 +8,16 @@ const ItemSchema = new mongoose.Schema({
     },
     description: {
         type: String
+    },
+    thumbnail: {
+        url: {
+            type: String,
+            required: true
+        },
+        public_id: {
+            type: String,
+            reuired: true
+        }
     }
 });
 

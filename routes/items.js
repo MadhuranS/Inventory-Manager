@@ -3,28 +3,62 @@ const router = express.Router();
 const { check, validationResult } = require("express-validator");
 
 const Item = require("../models/Item");
+const upload = require("../helpers/upload");
+const uploadImage = require("../services/image_upload");
+const { response } = require("express");
 
 // @route POST api/items
 // @desc Create an item
 router.post(
     "/",
-    [check("name", "Name is required and must be a string of at least length 1").notEmpty().isString()],
-    [check("description", "Description is required and must be a string of at least length 1").notEmpty().isString()],
+    upload.single("image"),
+    [
+        check(
+            "name",
+            "Name is required and must be a string of at least length 1"
+        )
+            .notEmpty()
+            .isString(),
+        check(
+            "description",
+            "Description is required and must be a string of at least length 1"
+        )
+            .notEmpty()
+            .isString(),
+    ],
     async (req, res) => {
         try {
-            const errors = validationResult(req);
-            if (!errors.isEmpty()) {
-                return res.status(400).json({ errors: errors.array() });
+            //validate for correct inputs
+            let errors = validationResult(req).array();
+            if (!req.hasOwnProperty("file") || !req.file.mimetype.startsWith("image/")){
+                errors.push({
+                    msg: "You must submit a valid image file",
+                    param: "image",
+                });
             }
+            if (errors.length > 0)
+                return res.status(400).json({ errors: errors });
 
+            //upload image to cloudinary and check if upload is successful
+            const uploadResponse = await uploadImage(req.file);
+            if (uploadResponse.errors.length > 0)
+                return res.status(502).json({ errors: uploadResponse.errors });
+
+            //Save request data to new item
             const newItem = new Item({
                 name: req.body.name,
                 description: req.body.description,
+                thumbnail: {
+                    url: uploadResponse.data.url,
+                    public_id: uploadResponse.data.public_id,
+                },
             });
-
             const item = await newItem.save();
+
+            //respond with json item data
             res.json(item);
         } catch (err) {
+            //respond with internal server error
             console.error("Server error", err.message);
             res.status(500).send("Internal server error");
         }
@@ -48,29 +82,26 @@ router.get("/", async (req, res) => {
 router.patch("/:id", async (req, res) => {
     try {
         if (
-            req.body.hasOwnProperty("name") && (
-            typeof req.body.name !== "string" || req.body.name.length < 1)
+            req.body.hasOwnProperty("name") &&
+            (typeof req.body.name !== "string" || req.body.name.length < 1)
         ) {
-            return res
-                .status(400)
-                .json({
-                    msg: "If name is passed, it must be a string of at least length 1",
-                    param: "name",
-                    location: "body",
-                });
+            return res.status(400).json({
+                msg: "If name is passed, it must be a string of at least length 1",
+                param: "name",
+                location: "body",
+            });
         }
 
         if (
-            req.body.hasOwnProperty("description")  &&
-            (typeof req.body.description !== "string" || req.body.description.length < 1)
+            req.body.hasOwnProperty("description") &&
+            (typeof req.body.description !== "string" ||
+                req.body.description.length < 1)
         ) {
-            return res
-                .status(400)
-                .json({
-                    msg: "If description is passed, it must be a string of at least length 1",
-                    param: "description",
-                    location: "body",
-                });
+            return res.status(400).json({
+                msg: "If description is passed, it must be a string of at least length 1",
+                param: "description",
+                location: "body",
+            });
         }
 
         const item = await Item.findById(req.params.id);

@@ -1,14 +1,24 @@
 const express = require("express");
 const connectDB = require("./config/db");
 const path = require("path");
+const cloudinary = require("cloudinary").v2; 
+const bodyParser = require("body-parser");
 
 const app = express();
 
 //Connect Database
 connectDB();
 
+// Connect to Cloudinary repository
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+  });
+
 //Setting up middleware
 app.use(express.json({ extended: false })); //needed to get data in req.body
+app.use(bodyParser.urlencoded({ extended: true }));
 
 //Define routes
 app.use("/api/items", require("./routes/items"));

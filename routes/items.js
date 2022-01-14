@@ -72,6 +72,7 @@ router.post(
 // @desc Route to fetch all items
 router.get("/", async (req, res) => {
     try {
+        //get all items from mongodb
         const items = await Item.find();
         res.json(items);
     } catch (err) {
@@ -84,8 +85,8 @@ router.get("/", async (req, res) => {
 // @desc Update an item
 router.patch("/:id", upload.single("image"), async (req, res) => {
     try {
-        let errors = [];
         //checks for correct input values
+        let errors = [];
         if (
             "name" in req.body &&
             (typeof req.body.name !== "string" || req.body.name.length < 1)
@@ -130,9 +131,11 @@ router.patch("/:id", upload.single("image"), async (req, res) => {
         let updatedItem = {};
         if (req.hasOwnProperty("file")) {
             //delete old image from cloudinary
-            const deleteErrors = await deleteImage(item.thumbnail.public_id);
-            if (deleteErrors.length > 0) {
-                return res.status(502).json({ errors: deleteErrors });
+            if (item.thumbnail && item.thumbnail.public_id) {
+                const deleteErrors = await deleteImage(item.thumbnail.public_id);
+                if (deleteErrors.length > 0) {
+                    return res.status(502).json({ errors: deleteErrors });
+                }
             }
 
             //upload new image to cloudinary and check if upload is successful
@@ -183,9 +186,11 @@ router.delete("/:id", async (req, res) => {
         }
 
         //delete image from cloudinary
-        const deleteErrors = await deleteImage(item.thumbnail.public_id);
-        if (deleteErrors.length > 0) {
-            return res.status(502).json({ errors: deleteErrors });
+        if (item.thumbnail && item.thumbnail.public_id) {
+            const deleteErrors = await deleteImage(item.thumbnail.public_id);
+            if (deleteErrors.length > 0) {
+                return res.status(502).json({ errors: deleteErrors });
+            }
         }
 
         //delete item from mongodb

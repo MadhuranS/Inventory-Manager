@@ -4,7 +4,7 @@ const { check, validationResult } = require("express-validator");
 
 const Item = require("../models/Item");
 const upload = require("../helpers/upload");
-const uploadImage = require("../services/image_upload");
+const {uploadImage, deleteImage} = require("../services/image");
 const { response } = require("express");
 
 // @route POST api/items
@@ -30,7 +30,10 @@ router.post(
         try {
             //validate for correct inputs
             let errors = validationResult(req).array();
-            if (!req.hasOwnProperty("file") || !req.file.mimetype.startsWith("image/")){
+            if (
+                !req.hasOwnProperty("file") ||
+                !req.file.mimetype.startsWith("image/")
+            ) {
                 errors.push({
                     msg: "You must submit a valid image file",
                     param: "image",
@@ -126,15 +129,25 @@ router.patch("/:id", async (req, res) => {
 // @desc Delete an item
 router.delete("/:id", async (req, res) => {
     try {
+        //check if item exists with that id
         const item = await Item.findById(req.params.id);
-
         if (!item) {
             return res.status(404).json({ msg: "Item not found" });
         }
 
+        //delete image from cloudinary
+        const deleteErrors = await deleteImage(item.thumbnail.public_id)
+        if (deleteErrors.length > 0) {
+            return res.status(502).json({ errors: deleteErrors });
+        }
+
+        //delete item from mongodb
         await item.remove();
+
+        //send successful response
         res.json({ msg: "Item removed" });
     } catch (err) {
+        //respond with error
         console.error(err.message);
         if (err.kind === "ObjectId") {
             return res.status(404).json({ msg: "Item not found" });

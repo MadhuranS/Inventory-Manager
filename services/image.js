@@ -22,4 +22,17 @@ async function uploadImage(file) {
 
     return res;
 }
-module.exports = uploadImage;
+
+async function deleteImage(public_id) {
+    let errors = []
+    try {
+        await cloudinary.uploader.destroy(public_id);
+    } catch (err) {
+        errors.push({
+            msg: `Image failed to delete successfully because: ${err.message}`,
+        });
+    }
+
+    return errors;
+}
+module.exports = {uploadImage, deleteImage};

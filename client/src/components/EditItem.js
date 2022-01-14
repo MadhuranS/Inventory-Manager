@@ -19,7 +19,6 @@ const EditItem = ({ editItem }) => {
 
     const onChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
-        console.log(sendData);
     };
 
     const onSubmit = (e) => {
@@ -80,7 +79,6 @@ const EditItem = ({ editItem }) => {
                         name="sendName"
                         type="checkbox"
                         label="Update name?"
-                        value={sendData.sendName}
                         onChange={(e) => onCheck(e)}
                     />
                 </Form.Group>
@@ -89,7 +87,6 @@ const EditItem = ({ editItem }) => {
                         name="sendDescription"
                         type="checkbox"
                         label="Update description?"
-                        value={sendData.sendDescription}
                         onChange={(e) => onCheck(e)}
                     />
                 </Form.Group>

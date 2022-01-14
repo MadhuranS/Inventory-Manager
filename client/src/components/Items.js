@@ -11,7 +11,7 @@ const Items = ({ getItems, deleteItem, items: { items } }) => {
     }, [getItems]);
 
     const onClick = (e, id) => {
-        deleteItem(id)
+        deleteItem(id);
     };
 
     return (
@@ -26,6 +26,20 @@ const Items = ({ getItems, deleteItem, items: { items } }) => {
                         className="mb-2 border-2"
                     >
                         <Card.Header>Item Id: {item._id}</Card.Header>
+                        {item.thumbnail && item.thumbnail.url ? (
+                            <Card.Img
+                                style={{
+                                    width: "25vw",
+                                    height: "15vh",
+                                    marginTop: "10px",
+                                    marginLeft: "20px"
+                                }}
+                                variant="top"
+                                src={item.thumbnail.url}
+                            />
+                        ) : (
+                            <Fragment></Fragment>
+                        )}
                         <Card.Body>
                             <Card.Title>{item.name}</Card.Title>
                             <Card.Text>{item.description}</Card.Text>
@@ -37,7 +51,9 @@ const Items = ({ getItems, deleteItem, items: { items } }) => {
                             >
                                 Edit
                             </Link>
-                            <Button onClick={(e) => onClick(e, item._id)}>Delete</Button>
+                            <Button onClick={(e) => onClick(e, item._id)}>
+                                Delete
+                            </Button>
                         </Card.Footer>
                     </Card>
                 ))}

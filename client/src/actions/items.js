@@ -24,9 +24,11 @@ export const createItem = (formData) => async (dispatch) => {
     try {
         const config = {
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type":
+                    "multipart/form-data; boundary=----FormBoundary-7de21530-68fd-11e3-a14f-37e8c06fffa5",
             },
         };
+
         await axios.post("/api/items", formData, config);
         dispatch(setAlert("Item Created", "success"));
     } catch (err) {

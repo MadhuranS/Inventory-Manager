@@ -1,41 +1,44 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useRef } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import { Link } from "react-router-dom";
 import { createItem } from "../actions/items";
 import { connect } from "react-redux";
 
-const CreateItem = ({ createItem}) => {
-    const [formData, setFormData] = useState({
-        name: "",
-        description: "",
-    });
-
-    const onChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
-    };
+const CreateItem = ({ createItem }) => {
+    const form = useRef(null)
 
     const onSubmit = (e) => {
         e.preventDefault();
-        createItem(formData)
-        setFormData({ name: "", description: "" });
+        const data = new FormData(form.current)
+        createItem(data);
     };
 
     return (
         <Fragment>
-            <Form onSubmit={onSubmit}>
+            <Form ref = {form} onSubmit={onSubmit}>
                 <Form.Group className="mb-3" controlId="formBasicName">
+                    <Form.Group
+                        id="inpFile"
+                        controlId="formFile"
+                        className="mb-3"
+                    >
+                        <Form.Label>Item thumbnail image</Form.Label>
+                        <Form.Control
+                            name="image"
+                            type="file"
+                        />
+                    </Form.Group>
                     <Form.Label>Item name</Form.Label>
                     <Form.Control
                         size="lg"
                         type="text"
                         name="name"
-                        value={formData.name}
-                        onChange={(e) => onChange(e)}
                         placeholder="Item name"
                     />
                     <Form.Text className="text-muted">
-                        API will send a 400 error if left empty since name should never be empty
+                        API will send a 400 error if left empty since name
+                        should never be empty
                     </Form.Text>
                 </Form.Group>
 
@@ -44,9 +47,7 @@ const CreateItem = ({ createItem}) => {
                     <Form.Control
                         name="description"
                         as="textarea"
-                        value={formData.description}
                         rows={3}
-                        onChange={(e) => onChange(e)}
                     />
                 </Form.Group>
                 <Button variant="primary" type="submit">

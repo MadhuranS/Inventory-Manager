@@ -1,8 +1,9 @@
 const express = require("express");
 const connectDB = require("./config/db");
 const path = require("path");
-const cloudinary = require("cloudinary").v2; 
+const cloudinary = require("cloudinary").v2;
 const bodyParser = require("body-parser");
+require("dotenv").config({ path: ".env" });
 
 const app = express();
 
@@ -14,7 +15,7 @@ cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
     api_key: process.env.CLOUDINARY_API_KEY,
     api_secret: process.env.CLOUDINARY_API_SECRET,
-  });
+});
 
 //Setting up middleware
 app.use(express.json({ extended: false })); //needed to get data in req.body
@@ -29,7 +30,7 @@ if (process.env.NODE_ENV === "production") {
     app.use(express.static("client/build"));
 
     app.get("*", (req, res) => {
-        res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+        res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
     });
 }
 

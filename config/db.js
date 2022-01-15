@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-require("dotenv").config({ path: ".env" }); 
+
 
 //Attempt to connect to mongodb database, if error, exit process with failure
 const connectDB = async () => {

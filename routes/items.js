@@ -35,6 +35,7 @@ router.post(
         }),
     ],
     async (req, res) => {
+        console.log("did request happen")
         try {
             //validate for correct inputs
             let errors = validationResult(req).array();
@@ -83,6 +84,8 @@ router.get("/", async (req, res) => {
     try {
         //get all items from mongodb
         const items = await Item.find();
+
+        //respond with items
         res.json(items);
     } catch (err) {
         console.error("Server error", err.message);
@@ -144,7 +147,7 @@ router.patch(
     ],
     async (req, res) => {
         try {
-            //checks for correct input values
+            //validate for correct input values
             let errors = validationResult(req).array();
 
             if (
@@ -178,7 +181,7 @@ router.patch(
                     }
                 }
 
-                //upload new image to cloudinary and check if upload is successful
+                //upload new image to cloudinary
                 const uploadResponse = await uploadImage(req.file);
                 if (uploadResponse.errors.length > 0) {
                     return res

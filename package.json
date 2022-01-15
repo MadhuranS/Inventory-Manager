@@ -8,11 +8,13 @@
     "server": "nodemon server",
     "client": "npm start --prefix client",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "test": "jest --verbose",
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
   },
   "author": "Madhuran Sivapragasam",
   "license": "MIT",
   "dependencies": {
+    "axios": "^0.24.0",
     "body-parser": "^1.19.1",
     "cloudinary": "^1.28.1",
     "config": "^3.3.7",
@@ -20,10 +22,12 @@
     "express": "^4.17.2",
     "express-validator": "^6.14.0",
     "mongoose": "^6.1.6",
-    "multer": "^1.4.4"
+    "multer": "^1.4.4",
+    "needle": "^3.0.0"
   },
   "devDependencies": {
     "concurrently": "^7.0.0",
+    "jest": "^27.4.7",
     "nodemon": "^2.0.15"
   }
 }

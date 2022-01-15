@@ -8,9 +8,16 @@ async function uploadImage(file) {
         errors: [],
     };
     try {
-        const uploadedImage = await cloudinary.uploader.upload(file.path);
+        const uploadedImage = await cloudinary.v2.uploader.upload(file.path, {
+            eager: [
+                { gravity: "custom", height: 150, width: 150, crop: "thumb" },
+            ],
+        });
         res.data = {
-            url: uploadedImage.url,
+            url:
+                uploadedImage.eager && uploadedImage.eager[0].url
+                    ? uploadedImage.eager[0].url
+                    : uploadedImage.url,
             public_id: uploadedImage.public_id,
         };
     } catch (err) {
@@ -24,7 +31,7 @@ async function uploadImage(file) {
 }
 
 async function deleteImage(public_id) {
-    let errors = []
+    let errors = [];
     try {
         await cloudinary.uploader.destroy(public_id);
     } catch (err) {
@@ -35,4 +42,4 @@ async function deleteImage(public_id) {
 
     return errors;
 }
-module.exports = {uploadImage, deleteImage};
+module.exports = { uploadImage, deleteImage };

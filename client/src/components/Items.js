@@ -29,8 +29,8 @@ const Items = ({ getItems, deleteItem, items: { items } }) => {
                         {item.thumbnail && item.thumbnail.url ? (
                             <Card.Img
                                 style={{
-                                    width: "25vw",
-                                    height: "15vh",
+                                    width: "100px",
+                                    height: "100px",
                                     marginTop: "10px",
                                     marginLeft: "20px"
                                 }}

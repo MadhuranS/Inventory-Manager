@@ -5,7 +5,6 @@ const { check, validationResult } = require("express-validator");
 const Item = require("../models/Item");
 const upload = require("../helpers/upload");
 const { uploadImage, deleteImage } = require("../services/image");
-const { response } = require("express");
 
 // @route POST api/items
 // @desc Create an item
@@ -13,23 +12,32 @@ router.post(
     "/",
     upload.single("image"),
     [
-        check(
-            "name",
-            "Name is required and must be a string of at least length 1"
-        )
-            .notEmpty()
-            .isString(),
+        check("name", "Name must be a string").isString(),
+        check("name", "Name must be a string of at least length 1").notEmpty(),
         check(
             "description",
-            "Description is required and must be a string of at least length 1"
-        )
-            .notEmpty()
-            .isString(),
+            "Description is required and must be a string"
+        ).isString(),
+        check(
+            "description",
+            "Description must be a string of at least length 1"
+        ).notEmpty(),
+        check(
+            "quantity",
+            "quantity must be an integer value"
+        ).isInt()
     ],
     async (req, res) => {
         try {
             //validate for correct inputs
             let errors = validationResult(req).array();
+            if (!("quantity" in req.body) || req.body.quantity < 0) {
+                errors.push({
+                    msg: "You must submit a quantity property with a positive integer value",
+                    param: "quantity",
+                    location: "body",
+                });
+            }
             if (
                 !req.hasOwnProperty("file") ||
                 !req.file.mimetype.startsWith("image/")
@@ -55,6 +63,7 @@ router.post(
                     url: uploadResponse.data.url,
                     public_id: uploadResponse.data.public_id,
                 },
+                quantity: req.body.quantity,
             });
             const item = await newItem.save();
 
@@ -111,6 +120,17 @@ router.patch("/:id", upload.single("image"), async (req, res) => {
         }
 
         if (
+            "quantity" in req.body &&
+            (Number.isInteger(req.body.quantity) || req.body.quantity < 0)
+        ) {
+            errors.push({
+                msg: "If quantity is passed, it must be a positive integer",
+                param: "integer",
+                location: "body",
+            });
+        }
+
+        if (
             req.hasOwnProperty("file") &&
             !req.file.mimetype.startsWith("image/")
         ) {
@@ -132,7 +152,9 @@ router.patch("/:id", upload.single("image"), async (req, res) => {
         if (req.hasOwnProperty("file")) {
             //delete old image from cloudinary
             if (item.thumbnail && item.thumbnail.public_id) {
-                const deleteErrors = await deleteImage(item.thumbnail.public_id);
+                const deleteErrors = await deleteImage(
+                    item.thumbnail.public_id
+                );
                 if (deleteErrors.length > 0) {
                     return res.status(502).json({ errors: deleteErrors });
                 }
@@ -150,11 +172,13 @@ router.patch("/:id", upload.single("image"), async (req, res) => {
                     url: uploadResponse.data.url,
                     public_id: uploadResponse.data.public_id,
                 },
+                quantity: req.body.quantity
             };
         } else {
             updatedItem = {
                 name: req.body.name,
                 description: req.body.description,
+                quantity: req.body.quantity
             };
         }
 

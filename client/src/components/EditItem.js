@@ -56,7 +56,9 @@ const EditItem = ({ editItem }) => {
                 <Form.Group className="mb-3" controlId="formBasicDescription">
                     <Form.Label>Description</Form.Label>
                     <Form.Control name="description" as="textarea" rows={3} />
-                </Form.Group>
+                    <Form.Label>Quantity</Form.Label>
+                    <Form.Control name="quantity" type="number" />
+               </Form.Group>
                 <Button variant="primary" type="submit">
                     Submit form
                 </Button>

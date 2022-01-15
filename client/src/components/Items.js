@@ -43,6 +43,7 @@ const Items = ({ getItems, deleteItem, items: { items } }) => {
                         <Card.Body>
                             <Card.Title>{item.name}</Card.Title>
                             <Card.Text>{item.description}</Card.Text>
+                            <Card.Text>Quantity: {item.quantity}</Card.Text>
                         </Card.Body>
                         <Card.Footer>
                             <Link

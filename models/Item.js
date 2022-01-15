@@ -18,6 +18,12 @@ const ItemSchema = new mongoose.Schema({
             type: String,
             reuired: true
         }
+    },
+    quantity: {
+        type: Number,
+        required: true
+        
+
     }
 });
 

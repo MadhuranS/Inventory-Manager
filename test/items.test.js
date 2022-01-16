@@ -96,8 +96,8 @@ describe("test for successful, creation, read, update and delete of an item", ()
     });
     describe("test for successful delete", () => {
         test("test for successful response", () => {
-            expect(getRes.statusCode).toBe(200);
-            expect(getRes.body).toBeDefined();
+            expect(deleteRes.statusCode).toBe(200);
+            expect(deleteRes.body).toBeDefined();
         });
     });
 });

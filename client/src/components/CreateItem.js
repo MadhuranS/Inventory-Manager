@@ -50,8 +50,14 @@ const CreateItem = ({ createItem }) => {
                         API will send a 400 error if left empty since description
                         should never be empty
                     </Form.Text>
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="formBasicQuantity">
                     <Form.Label>Quantity</Form.Label>
                     <Form.Control name="quantity" type="number" />
+                    <Form.Text className="text-muted">
+                        API will send a 400 error if left empty since quantity
+                        should never be empty
+                    </Form.Text>
                 </Form.Group>
                 <Button variant="primary" type="submit">
                     Submit form

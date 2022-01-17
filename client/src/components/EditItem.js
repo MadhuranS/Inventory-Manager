@@ -1,4 +1,4 @@
-import React, { Fragment,useRef } from "react";
+import React, { Fragment, useRef } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import { Link, useParams } from "react-router-dom";
@@ -17,10 +17,6 @@ const EditItem = ({ editItem }) => {
         }
         if (data.get("description").length === 0) {
             data.delete("description");
-        }
-
-        for (const key of data.keys()) {
-            console.log(key, ":", data.get(key));
         }
         editItem(data, id);
     };

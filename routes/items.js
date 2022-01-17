@@ -35,7 +35,6 @@ router.post(
         }),
     ],
     async (req, res) => {
-        console.log("did request happen")
         try {
             //validate for correct inputs
             let errors = validationResult(req).array();

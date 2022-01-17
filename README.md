@@ -53,7 +53,7 @@ CLOUDINARY_API_KEY=XXXXXXXXX
 CLOUDINARY_API_SECRET=XXXXXXXXXXXXXXX
 ```
 
-4. You can now run the project by running `npm run dev` in the project root which will run the client at `localhost:3000` and the server at `localhost:5000`.
+4. You can now run the project by running `npm run dev` in the project root which will run the client at `localhost:3000` and the server at `localhost:5000`. You can also choose to run just `npm run server` if you only want to run the server. 
 5. You can either test the endpoints using the client or you use postman or a similar service to test endpoints directly through the server. More information about the endpoints will be provided below. 
 6. Feel free to reach out to me at madhuran.siva@gmail.com if you need any help. 
 

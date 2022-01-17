@@ -11,6 +11,7 @@ Note: The frontend is was not thoroughly tested and may have bugs, it is primari
     + [Demo version](#demo-version)
     + [Local setup](#local-setup)
   * [API information and how to use](#api-information-and-how-to-use)
+  * + [Model](#model)
     + [Endpoints](#endpoints)
     + [Example requests with postman](#example-requests-with-postman)
   * [Run tests](#run-tests)
@@ -60,6 +61,17 @@ CLOUDINARY_API_SECRET=XXXXXXXXXXXXXXX
 Requests can be made to the hosted api server using base url: https://madhu-shopify-challenge.herokuapp.com
 
 Or requests can be made by following the instructions to setup the project locally and then make requests using base url: http://localhost:5000
+
+### Model
+```
+name: String            //Must be string with at least length of 1, required
+description: String     //Must be string with at least length of 1, required
+quantity: Integer       //Must be a positive integer, required
+thumbnail: {
+    url: String         //Url that redirects to the cloudinary image, required
+    public_id: String   //Id of the image which can be used to access and delete the image, required
+} 
+```
 
 ### Endpoints
 There are 5 main endpoints:

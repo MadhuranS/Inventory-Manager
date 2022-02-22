@@ -11,6 +11,9 @@ const CreateItem = ({ createItem }) => {
     const onSubmit = (e) => {
         e.preventDefault();
         const data = new FormData(form.current);
+        if (data.get("description").length === 0) {
+            data.delete("description");
+        }
         createItem(data);
     };
 

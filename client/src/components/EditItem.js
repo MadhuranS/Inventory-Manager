@@ -18,6 +18,10 @@ const EditItem = ({ editItem }) => {
         if (data.get("description").length === 0) {
             data.delete("description");
         }
+
+        if (data.get("quantity").length === 0) {
+            data.delete("quantity");
+        }
         editItem(data, id);
     };
 

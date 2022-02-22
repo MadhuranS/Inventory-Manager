@@ -18,8 +18,13 @@ router.post(
         ).notEmpty(),
         check(
             "description",
-            "Description must exist and be a string of at least length 1"
-        ).notEmpty(),
+            "If description is passed, it must be a string of at least length 1"
+        ).custom((value, { req }) => {
+            if (value != null && value.length < 1) {
+                return false;
+            }
+            return true;
+        }),
         check(
             "quantity",
             "quantity must exist and be an integer value"
@@ -138,7 +143,7 @@ router.patch(
             "quantity",
             "If quantity is passed, it must be a positive integer"
         ).custom((value, { req }) => {
-            if (value != null && (isNaN(value) || value < 0)) {
+            if (value != null && (value.length < 1 || isNaN(value) || value < 0)) {
                 return false;
             }
             return true;
@@ -148,7 +153,6 @@ router.patch(
         try {
             //validate for correct input values
             let errors = validationResult(req).array();
-
             if (
                 req.hasOwnProperty("file") &&
                 !req.file.mimetype.startsWith("image/")
@@ -167,8 +171,13 @@ router.patch(
                 return res.status(404).json({ msg: "Item not found" });
             }
 
-            //if file is passed, update the file value, otherwise ignore
-            let updatedItem = {};
+            //replace text properties with updated values
+            for (const element in req.body) {
+                console.log(element)
+                item[element] = req.body[element];
+            }
+
+            //if file is passed, replace thumbnail
             if (req.hasOwnProperty("file")) {
                 //delete old image from cloudinary
                 if (item.thumbnail && item.thumbnail.public_id) {
@@ -187,32 +196,13 @@ router.patch(
                         .status(502)
                         .json({ errors: uploadResponse.errors });
                 }
-                updatedItem = {
-                    name: req.body.name,
-                    description: req.body.description,
-                    thumbnail: {
-                        url: uploadResponse.data.url,
-                        public_id: uploadResponse.data.public_id,
-                    },
-                    quantity: req.body.quantity,
-                };
-            } else {
-                updatedItem = {
-                    name: req.body.name,
-                    description: req.body.description,
-                    quantity: req.body.quantity,
-                };
-            }
+                item["thumbnail"]["url"] = uploadResponse.data.url;
+                item["thumbnail"]["public_id"] = uploadResponse.data.public_id;
+            } 
 
-            //update item on mongodb
-            await item.updateOne(updatedItem);
-
-            //return json response
-            res.json({
-                msg: "Updated document",
-                bodyUpdates: req.body,
-                fileUpdates: req.file ? true : false,
-            });
+            //save and return updated item
+            await item.save()
+            res.json(item);
         } catch (err) {
             //return error
             console.error(err.message);
@@ -247,9 +237,6 @@ router.delete("/:id", async (req, res) => {
     } catch (err) {
         //respond with error
         console.error(err.message);
-        if (err.kind === "ObjectId") {
-            return res.status(404).json({ msg: "Item not found" });
-        }
         res.status(500).send("Server error");
     }
 });

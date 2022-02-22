@@ -1,17 +1,17 @@
 # Shopify-Developer-Challenge
 
-This is my submission for the 2022 shopify backend developer challenge (Demo: https://madhu-shopify-challenge.herokuapp.com/). The project is primarily a backend project built with node.js and express.js that acts an an inventory management service. The backend interacts with a mongoDB database for storage and uses cloudinary for image upload and thumbnail generation. It also has a frontend component that is mainly used to demo and test the backend. 
+This is my submission for the 2022 shopify backend developer challenge Feel free to demo the project using this link (The project frontend and backend are both hosted here): https://madhu-shopify-challenge.herokuapp.com/
 
-Note: The frontend is was not thoroughly tested and may have bugs, it is primarily meant as a method to test the backend and its ability to handle different types of requests. The frontend is built with react.
+Note: The frontend was not thoroughly tested and may have bugs, it is primarily meant as a method to test the backend and its ability to handle different types of requests.
 
 ## Index
   * [What does it do](#what-does-it-do)
   * [Tech stack](#tech-stack)
-  * [Instructions on how to setup](#instructions-on-how-to-setup)
-    + [Demo version](#demo-version)
+  * [Instructions on how to access demo or setup locally](#instructions-on-how-to-access-demo-or-setup-locally)
+    + [Heroku hosted demo (Recommended because you won't need API keys)](#heroku-hosted-demo)
     + [Local setup](#local-setup)
-  * [API information and how to use](#api-information-and-how-to-use)
-  * + [Model](#model)
+  * [API information](#api-information)
+    + [Model](#model)
     + [Endpoints](#endpoints)
     + [Example requests with postman](#example-requests-with-postman)
   * [Run tests](#run-tests)
@@ -24,15 +24,15 @@ This is an inventory management app where users can create, read, update and del
 
 ## Tech stack
 
-Back end service is built with Node.js and express.js framework. The inventory items are stored and retrieved from a MongoDB database. The cloudinary API is used for image storage, thumbnail generation and image hosting. Uri's from cloudinary are then stored on MongoDB so that the image can be accessed. I used Jest for unit testing and the app is hosted using Heroku. 
+Back end service is built with Node.js and Express.js framework. The inventory items are stored and retrieved from a MongoDB database. The cloudinary API is used for image storage, thumbnail generation and image hosting. Uri's from cloudinary are then stored on MongoDB so that the image can be accessed. I used Jest for unit testing and the app is hosted using Heroku. The frontend is built with React. 
 
-## Instructions on how to setup
+## Instructions on how to access demo or setup locally
 
-### Demo version 
-**The frontend and backend of the project can easily be accessed at https://madhu-shopify-challenge.herokuapp.com/. You can freely use this url if you would like to test the app in any way.**
+### Heroku hosted demo
+This is the recommended option since you will not need API keys to setup. The frontend and backend of the project can easily be accessed at https://madhu-shopify-challenge.herokuapp.com/. You can freely use this url if you would like to test the app in any way. Test requests can also be made using that as the base url. 
 
 ### Local setup 
-If you choose not to use the demo version, you can follow the following steps.
+If you choose not to use the demo version (https://madhu-shopify-challenge.herokuapp.com/), you can follow the following steps. Please keep in mind the heroku hosted demo is recommended since you won't need to create a new mongodb or cloudinary account. 
 
 Prerequisites:
 
@@ -57,7 +57,7 @@ CLOUDINARY_API_SECRET=XXXXXXXXXXXXXXX
 5. You can either test the endpoints using the client or you use postman or a similar service to test endpoints directly through the server. More information about the endpoints will be provided below. 
 6. Feel free to reach out to me at madhuran.siva@gmail.com if you need any help. 
 
-## API information and how to use
+## API information
 Requests can be made to the hosted api server using base url: https://madhu-shopify-challenge.herokuapp.com
 
 Or requests can be made by following the instructions to setup the project locally and then make requests using base url: http://localhost:5000

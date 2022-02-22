@@ -6,7 +6,7 @@ function logger(type, interaction) {
 	switch (type) {
 		case "Info":
 			statement = `${interaction.message}`
-			console.log(`${getTime()} : ${statement}`);
+			console.log(`${getTime()} : ${globalstats.access_counter} : ${statement}`);
 			append_to_file(
 				"logs/access.txt",
 				`${getTime()} : ${statement}\n`
@@ -33,13 +33,13 @@ function logger(type, interaction) {
 			globalstats.errors_encountered += 1;
 			break;
 	}
-	globalstats.access_counter += 1;
-	globalstats.last_used = getTime();
 	console.log(`${getTime()} : ${globalstats.access_counter} : ${statement}`);
 	append_to_file(
 		"logs/access.txt",
 		`${getTime()} : ${globalstats.access_counter} : ${statement}\n`
 	);
+	globalstats.access_counter += 1;
+	globalstats.last_used = getTime();
 	updateStats()
 }
 

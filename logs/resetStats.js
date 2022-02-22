@@ -20,11 +20,6 @@ function updateStats() {
             return console.log(err);
         }
     });
-    fs.writeFile("./logs/error.txt", "", { encoding: 'utf8' }, function (err) {
-        if (err) {
-            return console.log(err);
-        }
-    });
 }
 
 updateStats();

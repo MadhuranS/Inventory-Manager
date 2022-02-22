@@ -1,2 +1,4 @@
 node_modules/
 .env
+logs/access.txt
+logs/stats.json

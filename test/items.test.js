@@ -71,13 +71,11 @@ describe("test for successful, creation, read, update and delete of an item", ()
             expect(patchRes.body).toBeDefined();
         });
         test("test for successful thumbnail update", () => {
-            expect(patchRes.body.fileUpdates).toBe(true);
+            expect(patchRes.body.thumbnail).toBeDefined();
         });
         test("test for correct text field updates", () => {
-            expect(patchRes.body.bodyUpdates).toEqual({
-                name: patchData.name,
-                description: patchData.description,
-            });
+            expect(patchRes.body.name).toEqual(patchData.name)
+            expect(patchRes.body.description).toEqual(patchData.description)
         });
     });
     describe("test for successful read", () => {

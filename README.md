@@ -103,7 +103,7 @@ There are 5 main endpoints:
 Instructions:
 1. Follow the local setup guide to ensure that all dependencies are installed at that a .env file exists in the project root with all nessecary api keys
 2. In project root, run `npm run server` to start the backend server
-3. In a seperate window run `npm run test` to run the unit tests.
+3. In a seperate window run `npm run test` to run the e2e tests.
 
 
 ## Features

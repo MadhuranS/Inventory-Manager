@@ -3,6 +3,7 @@ const connectDB = require("./config/db");
 const path = require("path");
 const cloudinary = require("cloudinary").v2;
 const bodyParser = require("body-parser");
+const rateLimit = require('express-rate-limit')
 require("dotenv").config({ path: ".env" });
 
 const app = express();
@@ -20,6 +21,14 @@ cloudinary.config({
 //Setting up middleware
 app.use(express.json({ extended: false })); //needed to get data in req.body
 app.use(bodyParser.urlencoded({ extended: true }));
+const limiter = rateLimit({
+	windowMs: 10 * 60 * 1000, // 15 minutes
+	max: 500, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
+	standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+	legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+})
+// Apply the rate limiting middleware to all requests
+app.use(limiter)
 
 //Define routes
 app.use("/api/items", require("./routes/items"));

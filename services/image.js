@@ -1,6 +1,4 @@
 const cloudinary = require("cloudinary");
-const { response } = require("express");
-const res = require("express/lib/response");
 
 async function uploadImage(file) {
     let res = {

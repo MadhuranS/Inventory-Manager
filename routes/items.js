@@ -7,8 +7,45 @@ const upload = require("../helpers/upload");
 const { uploadImage, deleteImage } = require("../services/image");
 const logger = require("../logs/logger")
 
-// @route POST api/items
-// @desc Create an item
+/**
+ * Posts a new inventory item to the database
+ * @param {FormData} item - Multipart object with item properties and image
+ *
+ * @return {Object} newItem - The new item
+ *
+ *
+ * @swagger
+ * /api/items:
+ *  post:
+ *    tags: ["Items"]
+ *    description: Given item properties and an image, the server will post a new inventory item to the server
+ *    summary: Post a new inventory item
+ *    consumes:
+ *    - "multipart/form-data"
+ *    produces:
+ *    - "application.json"
+ *    parameters:
+ *    - in: "req"
+ *      name: "Form data"
+ *      required: true
+ *      default: {"name": "something", "description": "something2", "image": "image type file", "quantity": 0}
+ *      schema:
+ *        $ref: "#/definitions/Item"
+ *    responses:
+ *      '200':
+ *        description: Sucessfully added new inventory item
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: "#/definitions/Item"
+ *      '400':
+ *        description: Request body missing fields or invalid values
+ *      '502':
+ *        description: Failed to upload image
+ *      '500':
+ *          description: internal server error
+ *
+ */
 router.post(
     "/",
     upload.single("image"),
@@ -90,8 +127,24 @@ router.post(
     }
 );
 
-// @route GET api/items
-// @desc Route to fetch all items
+/**
+ *
+ * GET all stored items
+ *
+ * @return {[Object]} items - Array with all items stored as objects
+ *
+ * @swagger
+ * /api/items:
+ *  get:
+ *    description: Get all items
+ *    summary: Get all items
+ *    tags: ["Items"]
+ *    responses:
+ *      '200':
+ *        description: A successful response
+ *      '500':
+ *        description: Internal server error
+ */
 router.get("/", async (req, res) => {
     try {
         //get all items from mongodb
@@ -107,8 +160,26 @@ router.get("/", async (req, res) => {
     }
 });
 
-// @route GET api/items/:id
-// @desc Route to fetch one item
+/**
+ *
+ * GET item at specified id
+ *
+ * @return {Object} item - Item object 
+ *
+ * @swagger
+ * /api/items/:id:
+ *  get:
+ *    description: Get item at specified id
+ *    summary: Get an item
+ *    tags: ["Items"]
+ *    responses:
+ *      '200':
+ *        description: A successful response
+ *      '404':
+ *        description: Item is not found
+ *      '500':
+ *        description: Internal server error
+ */
 router.get("/:id", async (req, res) => {
     try {
         //find item with given id
@@ -128,8 +199,47 @@ router.get("/:id", async (req, res) => {
     }
 });
 
-// @route PATCH api/items/:id
-// @desc Update an item
+/**
+ * Patches an inventory item with updated fields
+ * @param {FormData} item - Multipart object with item properties and image
+ *
+ * @return {Object} updatedItem - The updated item
+ *
+ *
+ * @swagger
+ * /api/items/:id:
+ *  patch:
+ *    tags: ["Items"]
+ *    description: Given item properties, item and an image, the server will update the item at that id with the new properties
+ *    summary: Updates new inventory item
+ *    consumes:
+ *    - "multipart/form-data"
+ *    produces:
+ *    - "application.json"
+ *    parameters:
+ *    - in: "req"
+ *      name: "Form data"
+ *      required: false
+ *      default: {"name": "something", "description": "something2", "image": "image type file", "quantity": 0}
+ *      schema:
+ *        $ref: "#/definitions/Item"
+ *    responses:
+ *      '200':
+ *        description: Sucessfully added new inventory item
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: "#/definitions/Item"
+ *      '400':
+ *        description: Request body missing fields or invalid values
+ *      '404':
+ *        description: Item not found
+ *      '502':
+ *        description: Failed to upload image or delete image
+ *      '500':
+ *          description: internal server error
+ *
+ */
 router.patch(
     "/:id",
     upload.single("image"),
@@ -235,8 +345,36 @@ router.patch(
     }
 );
 
-// @route DELETE api/items/:id
-// @desc Delete an item
+/**
+ * Deletes an item based using the passed id
+ *
+ * @return {Object} Object containing message the item is deleted
+ *
+ *
+ * @swagger
+ * /api/items/{id}:
+ *  delete:
+ *    tags: ['Items']
+ *    description: Delete an item by using a specified id
+ *    summary: Delete an item
+ *    produces:
+ *      "application/json"
+ *    parameters:
+ *    - in: "path"
+ *      name: "id"
+ *      description: "**ID** (unique identifier) of the inventory item"
+ *      required: true
+ *    responses:
+ *      '200':
+ *        description: Sucessfully deleted inventory item with `{id}`
+ *      '404':
+ *        description: Invalid request URL
+ *      '502':
+ *        description: Failed to delete image
+ *      '500':
+ *        description: Internal server error
+ *
+ */
 router.delete("/:id", async (req, res) => {
     try {
         //check if item exists with that id

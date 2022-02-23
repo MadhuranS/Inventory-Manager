@@ -4,6 +4,8 @@ const path = require("path");
 const cloudinary = require("cloudinary").v2;
 const bodyParser = require("body-parser");
 const rateLimit = require('express-rate-limit')
+const swaggerUi = require("swagger-ui-express");
+const swaggerJsDoc = require("swagger-jsdoc");
 require("dotenv").config({ path: ".env" });
 
 const app = express();
@@ -32,7 +34,53 @@ app.use(limiter)
 
 //Define routes
 app.use("/api/items", require("./routes/items"));
-
+const swaggerOptions = {
+    swaggerDefinition: {
+      info: {
+        title: "Shopify developer challenge - inventory manager",
+        description:
+          "Documentation for inventory manager application",
+        contact: {
+          name: "Madhu Sivapragasam",
+        },
+      },
+      definitions: {
+        Item: {
+          type: "object",
+          properties: {
+            name: {
+              required: true,
+              type: "string",
+            },
+            description: {
+              type: "string",
+            },
+            thumbnail: {
+                type: "object",
+                properties: {
+                    url: {
+                        type: "string",
+                        required: true
+                    },
+                    public_id: {
+                        type: "string",
+                        required: true
+                    }
+                }
+              },
+            quantity: {
+              required: true,
+              type: "integer",
+              format: "int64",
+            },
+          },
+        },
+      },
+    },
+    apis: ["./routes/items.js"],
+  };
+  const swaggerDocs = swaggerJsDoc(swaggerOptions);
+  app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 //Serve static assets in production
 if (process.env.NODE_ENV === "production") {
     // Set static folder

@@ -9,7 +9,7 @@ function logger(type, interaction) {
 			console.log(`${getTime()} : ${globalstats.access_counter} : ${statement}`);
 			append_to_file(
 				"logs/access.txt",
-				`${getTime()} : ${statement}\n`
+				`${getTime()} : ${globalstats.access_counter} : ${statement}\n`
 			);
 			return
 		case "Create":

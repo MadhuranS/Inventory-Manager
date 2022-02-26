@@ -1,6 +1,6 @@
 # Shopify-Developer-Challenge
 
-This is my submission for the 2022 shopify backend developer challenge Feel free to demo the project using this link (The project frontend and backend are both hosted here): https://madhu-shopify-challenge.herokuapp.com/
+This is my submission for the 2022 shopify backend developer challenge Feel free to demo the project using this link The project frontend and backend are both hosted here: https://madhu-shopify-challenge.herokuapp.com/. Documentation can be found at https://madhu-shopify-challenge.herokuapp.com/api-docs.
 
 Note: The frontend was not thoroughly tested and may have bugs, it is primarily meant as a method to test the backend and its ability to handle different types of requests.
 
@@ -24,7 +24,7 @@ This is an inventory management app where users can create, read, update and del
 
 ## Tech stack
 
-Back end service is built with Node.js and Express.js framework. The inventory items are stored and retrieved from a MongoDB database. The cloudinary API is used for image storage, thumbnail generation and image hosting. Uri's from cloudinary are then stored on MongoDB so that the image can be accessed. I used Jest for unit testing and the app is hosted using Heroku. The frontend is built with React. 
+Back end service is built with Node.js and Express.js framework. The inventory items are stored and retrieved from a MongoDB database. The cloudinary API is used for image storage, thumbnail generation and image hosting. Uri's from cloudinary are then stored on MongoDB so that the image can be accessed. I used Jest for unit testing and the app is hosted using Heroku. The documentation is made with Swagger and JsDoc. The frontend is built with React and redux. 
 
 ## Instructions on how to access demo or setup locally
 
@@ -110,7 +110,9 @@ Instructions:
 - Create, read, update and delete inventory items
 - Upload and host images with cloudinary
 - Middleware validation to check for valid requests
-- Unit tests
+- Middleware for rate limiting
+- internal logs and metrics
+- e2e tests
 - MongoDB storage
 - Frontend made for testing purposes
 - Hosted with Heroku

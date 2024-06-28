@@ -1,6 +1,6 @@
 # Shopify-Developer-Challenge
 
-This is my submission for the 2022 shopify backend developer challenge Feel free to demo the project using this link The project frontend and backend are both hosted here: https://madhu-shopify-challenge.herokuapp.com/. Documentation can be found at https://madhu-shopify-challenge.herokuapp.com/api-docs.
+This is an inventory manager service built as part of the shopify developer challenge. Feel free to demo the project using this link The project frontend and backend are both hosted here: https://madhu-shopify-challenge.herokuapp.com/. Documentation can be found at https://madhu-shopify-challenge.herokuapp.com/api-docs.
 
 Note: The frontend was not thoroughly tested and may have bugs, it is primarily meant as a method to test the backend and its ability to handle different types of requests.
 
